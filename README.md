@@ -3,7 +3,7 @@
 
 The project tasks are:
 - Create docker file to run python http module - *done*
-- Write IAAC for EC2 instance - *in progress*
+- Write IAAC for EC2 instance - *done*
 - Write IAAC for ECR repository - *pending*
 - Write IAAC for EKS cluster - *pending*
 - Deploy Jenkins on the EC2 instance/s - *pending*
