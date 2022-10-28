@@ -1,0 +1,47 @@
+pipeline {
+    agent { label "master-executer"}
+    environment {
+        registry = "339870914716.dkr.ecr.us-east-1.amazonaws.com/python-http"
+    }
+    stages {
+        stage('Cloning Git') {
+            steps {
+                checkout([$class: 'GitSCM', branches: [[name: '*/main']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: '', url: 'https://github.com/netashiloh/home_assignment.git']]])     
+            }
+        }
+    // Creating ECR
+    stage ('apply ECR') {
+        steps{
+            dir('/var/jenkins_home/workspace/docker-ecr/iaac/ecr') {
+            script {
+                sh 'pwd'
+                sh 'terraform init'
+                sh 'terraform apply -auto-approve'
+          }
+        }        
+      }
+    }
+    // Building Docker images
+    stage('Building image') {
+        steps{
+          dir('/var/jenkins_home/workspace/docker-ecr/app') {
+            script {
+                dockerImage = docker.build("python-http")
+            }
+          }
+        }
+    }
+   
+    // Uploading Docker images into AWS ECR
+    stage('Pushing to ECR') {
+     steps{  
+         script {
+                sh 'aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 339870914716.dkr.ecr.us-east-1.amazonaws.com'
+                sh 'docker tag python-http:latest 339870914716.dkr.ecr.us-east-1.amazonaws.com/python-http:latest'
+                sh 'docker push 339870914716.dkr.ecr.us-east-1.amazonaws.com/python-http:latest'
+         }
+        }
+      }
+
+    }
+}
