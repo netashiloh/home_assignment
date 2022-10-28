@@ -12,7 +12,7 @@ pipeline {
     // Creating ECR
     stage ('apply ECR') {
         steps{
-            dir('/var/jenkins_home/workspace/docker-ecr/iaac/ecr') {
+            dir('./iaac/ecr') {
             script {
                 sh 'pwd'
                 sh 'terraform init'
@@ -24,7 +24,7 @@ pipeline {
     // Building Docker images
     stage('Building image') {
         steps{
-          dir('/var/jenkins_home/workspace/docker-ecr/app') {
+          dir('./app') {
             script {
                 dockerImage = docker.build("python-http")
             }
