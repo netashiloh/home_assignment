@@ -26,6 +26,8 @@ resource "aws_security_group" "jenkins-master-sg" {
   }
 }
 
+
+
 # Keypair to implement in EC2 instance
 resource "aws_key_pair" "jenkins-key" {
   provider   = aws.region-jenkins
@@ -33,11 +35,28 @@ resource "aws_key_pair" "jenkins-key" {
   public_key = file("/tmp/home_assignment_id_rsa.pub")
 }
 
-# iam_policy for Jenkins Master to ECR (not yet in use)
-# need to add S3 access too
-data "aws_iam_policy" "JenkinsMasterToECR" {
-  arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryFullAccess"
+
+
+# EC2 policy
+resource "aws_iam_role_policy" "jenkins_policy" {
+  name   = "test_policy"
+  role   = aws_iam_role.jenkins_role.id
+  policy = file("jenkins_policy.json")
 }
+
+# EC2 role
+resource "aws_iam_role" "jenkins_role" {
+  name               = "jenkins_role"
+  assume_role_policy = file("jenkins_ec2-assume-policy.json")
+}
+
+# Instance profile
+resource "aws_iam_instance_profile" "jenkins_profile" {
+  name = "jenkins_profile"
+  role = aws_iam_role.jenkins_role.name
+}
+
+
 
 # Start Jenkins-master instance using SG and keypair
 resource "aws_instance" "jenkins-master" {
@@ -47,12 +66,15 @@ resource "aws_instance" "jenkins-master" {
   key_name                    = aws_key_pair.jenkins-key.key_name
   associate_public_ip_address = true
   vpc_security_group_ids      = [aws_security_group.jenkins-master-sg.id]
+  iam_instance_profile        = aws_iam_instance_profile.jenkins_profile.name
 
   tags = {
-    Name = "jenkins_master_tf"
+    Name = "jenkins_master"
   }
 
 }
+
+
 
 # Output the IP address, to connect easily via SSH
 output "Jenkins-Main-Node-Public-IP" {

@@ -3,7 +3,7 @@ terraform {
   backend "s3" {
     region  = "us-east-1"
     profile = "default"
-    key     = "terrformstatefile"
+    key     = "Jenkins_EC2/terrformstatefile"
     bucket  = "terraformstatebucket21102022"
   }
 }
