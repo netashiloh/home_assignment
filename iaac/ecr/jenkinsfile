@@ -6,7 +6,7 @@ pipeline {
     stages {
         stage('Cloning Git') {
             steps {
-                checkout([$class: 'GitSCM', branches: [[name: '*/main']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: '', url: 'https://github.com/netashiloh/home_assignment.git']]])     
+                checkout([$class: 'GitSCM', branches: [[name: '*/alternative_app']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: '', url: 'https://github.com/netashiloh/home_assignment.git']]])     
             }
         }
     // Creating ECR
@@ -14,8 +14,7 @@ pipeline {
         steps{
             dir('./iaac/ecr') {
             script {
-                sh 'pwd'
-                sh 'terraform init'
+                sh 'terraform init --reconfigure'
                 sh 'terraform apply -auto-approve'
           }
         }        
@@ -26,7 +25,7 @@ pipeline {
         steps{
           dir('./app') {
             script {
-                dockerImage = docker.build("python-http")
+                dockerImage = docker.build("python-flask")
             }
           }
         }
@@ -37,8 +36,8 @@ pipeline {
      steps{  
          script {
                 sh 'aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 339870914716.dkr.ecr.us-east-1.amazonaws.com'
-                sh 'docker tag python-http:latest 339870914716.dkr.ecr.us-east-1.amazonaws.com/python-http:latest'
-                sh 'docker push 339870914716.dkr.ecr.us-east-1.amazonaws.com/python-http:latest'
+                sh 'docker tag python-flask:latest 339870914716.dkr.ecr.us-east-1.amazonaws.com/python-flask:latest'
+                sh 'docker push 339870914716.dkr.ecr.us-east-1.amazonaws.com/python-flask:latest'
          }
         }
       }
