@@ -29,26 +29,19 @@ module "eks" {
       instance_type = ["t3.small"]
       capacity_type = "ON_DEMAND"
     }
+  }
 
-    spot = {
-      desired_size = 1
-      min_size     = 1
-      max_size     = 5
-
-      labels = {
-        role = "spot"
-      }
-
-      taints = [{
-        key    = "market"
-        value  = "spot"
-        effect = "NO_SCHEDULE"
-      }]
-
-      instance_types = ["t3.micro"]
-      capacity_type  = "SPOT"
+  node_security_group_additional_rules = {
+    ingress_allow_access_from_control_plane = {
+      type                          = "ingress"
+      protocol                      = "tcp"
+      from_port                     = 9443
+      to_port                       = 9443
+      source_cluster_security_group = true
+      description                   = "Allow access from control plane to webhook port of AWS load balancer controller"
     }
   }
+
 
   # Use aws-auth configmap
   manage_aws_auth_configmap = true
