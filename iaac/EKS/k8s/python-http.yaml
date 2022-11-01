@@ -15,7 +15,7 @@ spec:
         app: python-http
     spec:
       containers:
-      - image: 339870914716.dkr.ecr.us-east-1.amazonaws.com/python-http:latest
+      - image: 339870914716.dkr.ecr.us-east-1.amazonaws.com/python-flask:latest
         name: python-http
         ports:
         - containerPort: 80
