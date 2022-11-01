@@ -11,11 +11,6 @@ The project tasks are:
 - Create job on Jenkins to run the created pipieline - *done*
 - Write a deployment for the docker application to run on the EKS cluster - *done*
 
-### Python http APP
-
-This repo is an example of simple python appliation running as a docker container.
-This repository contain a Dockerfile and a sample.txt file that will be used in the Docker.
-
 #### Prequisites:
  - AWS account
  - Work environment(eg: WSL2 / ec2) with the following software installations
