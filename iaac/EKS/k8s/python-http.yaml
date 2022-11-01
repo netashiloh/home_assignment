@@ -1,0 +1,56 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: python-http
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: python-http
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: python-http
+    spec:
+      containers:
+      - image: 339870914716.dkr.ecr.us-east-1.amazonaws.com/python-http:latest
+        name: python-http
+        ports:
+        - containerPort: 8000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: python-http
+  namespace: default
+spec:
+  ports:
+  - port: 8000
+    protocol: TCP
+  type: ClusterIP
+  selector:
+    app: python-http
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: python-http
+  namespace: default
+  annotations:
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+spec:
+  ingressClassName: alb
+  rules:
+    - host:
+      http:
+        paths:
+          - path: /
+            pathType: Exact
+            backend:
+              service:
+                name: python-http
+                port:
+                  number: 8000
