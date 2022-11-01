@@ -3,7 +3,7 @@ terraform {
   backend "s3" {
     region  = "us-east-1"
     profile = "default"
-    key     = "ecr/terrformstatefile"
+    key     = "ecr_flask/terrformstatefile"
     bucket  = "terraformstatebucket21102022"
   }
 }

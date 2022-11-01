@@ -18,7 +18,7 @@ spec:
       - image: 339870914716.dkr.ecr.us-east-1.amazonaws.com/python-http:latest
         name: python-http
         ports:
-        - containerPort: 8000
+        - containerPort: 80
 ---
 apiVersion: v1
 kind: Service
@@ -27,7 +27,7 @@ metadata:
   namespace: default
 spec:
   ports:
-  - port: 8000
+  - port: 80
     protocol: TCP
   type: ClusterIP
   selector:
@@ -53,4 +53,4 @@ spec:
               service:
                 name: python-http
                 port:
-                  number: 8000
+                  number: 80

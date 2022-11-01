@@ -2,7 +2,7 @@
 module "ecr" {
   source = "terraform-aws-modules/ecr/aws"
 
-  repository_name = "python-http"
+  repository_name = "python-flask"
 
   repository_lifecycle_policy = jsonencode({
     rules = [
