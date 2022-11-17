@@ -1,5 +1,5 @@
 # Home assignment
-✨ Poject completed ✨
+✨ Project completed ✨
 
 The project tasks are:
 - Create docker file to run python http module - *done*
@@ -8,7 +8,7 @@ The project tasks are:
 - Write IAAC for EKS cluster - *done*
 - Deploy Jenkins on the EC2 instance/s - *done*
 - Create CI pipeline to create ECR repo, build docker image and push it to the ECR - *done*
-- Create job on Jenkins to run the created pipieline - *done*
+- Create job on Jenkins to run the created pipeline - *done*
 - Write a deployment for the docker application to run on the EKS cluster - *done*
 
 #### Prequisites:
